@@ -17,7 +17,7 @@
 
 class Cli_Sck{
 public:
-    Cli_Sck():srv_sock_(0),srv_prt_(0),srv_lstn_(0),active_(false){};
+    Cli_Sck();
     ~Cli_Sck();
     
     //소켓 프로퍼티 영역
@@ -29,7 +29,7 @@ public:
     
     
     //소켓 set 영역
-    void set_sock(int d);         //소켓 디스크립터
+    void set_sock();         //소켓 디스크립터
     void set_prt(int p);          //서버 prt
     void set_addr(const char* a);//서버 ip
     void set_lst(int s);          //클라이언트 listen 크기

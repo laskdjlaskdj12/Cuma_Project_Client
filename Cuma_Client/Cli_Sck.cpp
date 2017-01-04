@@ -8,7 +8,11 @@
 
 #include "Cli_Sck.hpp"
 
-
+Cli_Sck::Cli_Sck():srv_sock_(0),srv_prt_(0),srv_lstn_(0),active_(false){
+    
+    srv_addr_ = new char[30];
+    memset(srv_addr_, 0, 30);
+}
 Cli_Sck::~Cli_Sck(){
     
 }
@@ -32,9 +36,10 @@ const int Cli_Sck::srv_lstn(){
 
 
 //소켓 set 영역
-void Cli_Sck::set_sock(int d){
-    srv_sock_ = d;
+void Cli_Sck::set_sock(){
+    srv_sock_ = socket(PF_INET,SOCK_STREAM,0);
 }
+
 void Cli_Sck::set_prt(int p){
     srv_prt_ = p;
 }

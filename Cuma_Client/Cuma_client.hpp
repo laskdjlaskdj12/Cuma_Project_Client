@@ -32,9 +32,8 @@
 
 //Cli_Sck 헤더 입포트
 #include "Cli_Sck.hpp"
-
-#define READ_BINARY 1
-#define WRITE_BINARY 2
+#include "Error_Binary.hpp"
+#include "C_Log.hpp"
 
 
 //데모이므로 한개의 파일만 여러 서버에 업로드가 가능함
@@ -76,19 +75,23 @@ private:
    // bool _file_rcv();       //파일 수신 kevent 를 넣어야 하므로 나중에
     
 private:
+    void _CS_LOG(const string& s);
+    void _CS_LOG(const string& s,unsigned long long siz);
+    
+    bool _CS_SND( const int s, Json::Value& J);
+    bool _CS_RCV( const int s, Json::Value& J);
     
     
 private:
-
     
     //보낼 서버 ip 리스트
     list<Cli_Sck> srv_lst_;
+    
     string f_buff_;
     string f_name_;
+    
     unsigned long long f_fme_siz_;
     list<Json::Value> f_frag_lst_;   //파일 파편화 리스트
-    
-    
     
     bool active_;
     

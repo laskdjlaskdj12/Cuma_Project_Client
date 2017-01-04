@@ -78,12 +78,14 @@ int main(int argc, const char * argv[]) {
     
     c->start();
     
-    c->add_server_lst("127.0.0.1", 33390);
     c->add_server_lst("127.0.0.1", 33391);
-    c->add_server_lst("127.0.0.1", 33392);
-    c->add_server_lst("127.0.0.1", 33393);
-    c->add_server_lst("127.0.0.1", 33394);
-    c->add_server_lst("127.0.0.1", 33395);
+    c->set_file_name("test.txt");
+    
+    //c->add_server_lst("127.0.0.1", 33391);
+    //c->add_server_lst("127.0.0.1", 33392);
+    //c->add_server_lst("127.0.0.1", 33393);
+    //c->add_server_lst("127.0.0.1", 33394);
+    //c->add_server_lst("127.0.0.1", 33395);
     
     c->show_server_list();
     

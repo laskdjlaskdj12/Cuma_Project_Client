@@ -36,6 +36,8 @@
 		505D91C81E1805600012FBC1 /* Cli_Sck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cli_Sck.cpp; sourceTree = "<group>"; };
 		505D91C91E1805600012FBC1 /* Cli_Sck.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cli_Sck.hpp; sourceTree = "<group>"; };
 		50F6C83D1E1B441100DE8C47 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = "../../../../../xcode/jsoncpp-master/dist/jsoncpp.cpp"; sourceTree = "<group>"; };
+		50F6C83F1E1B478C00DE8C47 /* Error_Binary.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Error_Binary.hpp; sourceTree = "<group>"; };
+		50F6C8431E1BAA5B00DE8C47 /* C_Log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = C_Log.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,13 +70,12 @@
 		505D91B31E1504E80012FBC1 /* Cuma_Client */ = {
 			isa = PBXGroup;
 			children = (
+				50F6C8451E1BAB7C00DE8C47 /* Error_Define */,
 				50F6C83D1E1B441100DE8C47 /* jsoncpp.cpp */,
-				505D91C61E17FFC90012FBC1 /* NO_USE */,
 				505D91B41E1504E80012FBC1 /* main.cpp */,
-				505D91BE1E164CF40012FBC1 /* Cuma_client.cpp */,
-				505D91BF1E164CF40012FBC1 /* Cuma_client.hpp */,
-				505D91C81E1805600012FBC1 /* Cli_Sck.cpp */,
-				505D91C91E1805600012FBC1 /* Cli_Sck.hpp */,
+				505D91C61E17FFC90012FBC1 /* NO_USE */,
+				50F6C8401E1BA9F200DE8C47 /* Log */,
+				50F6C8411E1BA9FD00DE8C47 /* Cuma_Client */,
 			);
 			path = Cuma_Client;
 			sourceTree = "<group>";
@@ -86,6 +87,33 @@
 				505D91C41E17F8FA0012FBC1 /* Cuma_Block.hpp */,
 			);
 			name = NO_USE;
+			sourceTree = "<group>";
+		};
+		50F6C8401E1BA9F200DE8C47 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				50F6C8431E1BAA5B00DE8C47 /* C_Log.hpp */,
+			);
+			name = Log;
+			sourceTree = "<group>";
+		};
+		50F6C8411E1BA9FD00DE8C47 /* Cuma_Client */ = {
+			isa = PBXGroup;
+			children = (
+				505D91BF1E164CF40012FBC1 /* Cuma_client.hpp */,
+				505D91BE1E164CF40012FBC1 /* Cuma_client.cpp */,
+				505D91C91E1805600012FBC1 /* Cli_Sck.hpp */,
+				505D91C81E1805600012FBC1 /* Cli_Sck.cpp */,
+			);
+			name = Cuma_Client;
+			sourceTree = "<group>";
+		};
+		50F6C8451E1BAB7C00DE8C47 /* Error_Define */ = {
+			isa = PBXGroup;
+			children = (
+				50F6C83F1E1B478C00DE8C47 /* Error_Binary.hpp */,
+			);
+			name = Error_Define;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

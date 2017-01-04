@@ -10,13 +10,9 @@
 
 
 Cuma_Client::Cuma_Client(){
-    srv_lst_.clear();
-    f_frag_lst_.clear();
-    f_name_.clear();
-    f_buff_.clear();
+    
+    
 }
-
-
 
 Cuma_Client::~Cuma_Client(){
     srv_lst_.clear();
@@ -30,6 +26,7 @@ Cuma_Client::~Cuma_Client(){
 //전송시작
 void Cuma_Client::start(){
     active_ = true;
+    _CS_LOG(C_F_ACTIVE);
 }
 
 
@@ -49,6 +46,15 @@ void Cuma_Client::set_active(bool b){
 
 
 
+
+
+
+
+
+
+
+
+
 //파일 선택
 void Cuma_Client::set_file_name(const string path){
     
@@ -58,11 +64,15 @@ void Cuma_Client::set_file_name(const string path){
         
         std::cout<<"[Info] : Wrong Path"<<std::endl;
         
+        o_file.close();
         return;
     }
     
     f_name_ = path;
     
+    o_file.close();
+    
+    _CS_LOG(C_F_OPEN);
 }
 
 
@@ -72,16 +82,40 @@ string Cuma_Client::file_name(){
 
 
 
-//서버리스트에 지정된 서버 ip insert
+
+
+
+
+
+
+//리스트에 삽입된 서버ip와 port를 생성후 sockaddr_in 구조체 생성
 void Cuma_Client::add_server_lst(const std::string s,
                                  int prt){
     
     Cli_Sck s_temp;
+    s_temp.set_sock();
     s_temp.set_addr(s.c_str());
     s_temp.set_prt(prt);
     s_temp.set_sck_addr();
     srv_lst_.push_back(s_temp);
+    
+    _CS_LOG(C_F_ADD_SERV);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -99,6 +133,18 @@ void Cuma_Client::show_server_list(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 //서버 리스트 로 파일 파편화 전송
 bool Cuma_Client::send_server_list(){
     
@@ -107,31 +153,57 @@ bool Cuma_Client::send_server_list(){
      std::cout<<"[Info] : Each File_Fragment frame is : "<<(f_buff_.size()/srv_lst_.size())<<" byte."<<std::endl;*/
     
     //파일 파편화 시작
-    _file_frag();
+    if(_file_frag() != true){
+        _CS_LOG(C_F_FLE_FRAG,false);
+    }
     
     //파일 전송 시작
-    _file_snd();
-    
+    if(_file_snd() != true){
+        _CS_LOG(C_F_FLE_SND,false);
+    }
     return true;
 }
+
+
+
+
+
+
+
+
+
 
 list<Cli_Sck> Cuma_Client::server_list(){
     return srv_lst_;
 }
 
+
+
+
+
+
+
+
+
 //파일을 파편화 하여 f_frag_lst_에 보관함
 bool Cuma_Client::_file_frag(){
     
     try{
+        
         ifstream r_file;
         unsigned long long f_siz;
         shared_ptr<char> f_chr_to_str_tmp(new char[512]);
+        
+        //파일 오픈
+        r_file.open(f_name_,std::ios::binary);
+        
+        _CS_LOG(C_F_FLE_SND,true);
         
         //파일 크기 탐색
         r_file.seekg(std::ios::end);
         f_siz = r_file.tellg();
         r_file.seekg(std::ios::beg);
-        
+        _CS_LOG(C_F_FLE_SIZ,f_siz);
         
         //파일 이 eof될때가지 바이너리로 읽기
         while(!r_file.eof()){
@@ -146,41 +218,83 @@ bool Cuma_Client::_file_frag(){
             f_buff_.append(f_chr_to_str_tmp.get(),512);
             
         }
+        _CS_LOG(C_F_FLE_BNYSIZ,f_buff_.size());
+        
         
         //f_tmp를 delete함
         f_chr_to_str_tmp.reset();
         
         //각 파편화 프레임 크기
-        f_fme_siz_ = (f_siz/srv_lst_.size());
+        f_fme_siz_ = (f_buff_.size()/srv_lst_.size());
+        _CS_LOG(C_F_FLE_EACH_FRM_COUNT,f_fme_siz_);
         
         
         //등록된 서버 리스트수대로 파일을 나눠서 f_frag_lst 에 저장
-        for( int i = 0 ; i < server_list().size(); i++){
+        for( int i = 0 ; i < srv_lst_.size(); i++){
             
             Json::Value f_val;
             f_val["F_name"] = f_name_;
             f_val["F_frame_num"] = i;
-            f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) ,
-                                               (i + f_fme_siz_));
+            
+            //만약 해당 프레임 범위가 파일 바이너리 버퍼 크기를 벗어났을 경우 바이너리 버퍼 크기만큼 분할 사이즈를 설정
+            if(i * f_fme_siz_ > f_buff_.size()){
+                f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) ,
+                                                   f_buff_.size());
+            }else{
+                f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) ,
+                                                   (i+1) * f_fme_siz_);
+            }
+            
+            
             f_val["F_siz"] = f_fme_siz_;
             f_val["MODE"] = WRITE_BINARY;
             
-            //i = 프레임 첫번호 ~ i + frag_siz(각 프레임별 버퍼 크기)
+            
             f_frag_lst_.push_back(f_val);
             
             f_val.clear();
         }
-        return true;
+        _CS_LOG(C_F_FLE_SPLT_FRAME,true);
         
+        
+        //파일 프레임 으로 나뉘어진 json 보여주기
+        for(list<Json::Value>::iterator it = f_frag_lst_.begin(); it != f_frag_lst_.end(); it++){
+            
+            std::cout<<"============ Json_Value ============= "<<std::endl;
+            std::cout<<"F_name : "<<(*it)["F_name"].asString()<<std::endl;
+            std::cout<<"F_frame_num : "<<(*it)["F_frame_num"].asUInt64()<<std::endl;
+            std::cout<<"F_siz : "<<(*it)["F_siz"].asUInt64()<<std::endl;
+            std::cout<<"MODE : "<<(*it)["MODE"].asInt()<<std::endl;             //mode 0 = READ_BINARY,
+                                                                                //mode 1 = WRITE_BINARY
+            
+        }
+        return true;
         
     }catch(std::exception& e){
         std::cout<<"[Error] : "<<e.what()<<std::endl;
         return false;
+        
     }catch(Json::Exception& e){
         std::cout<<"[Error] : "<<e.what()<<std::endl;
         return false;
+    }catch(const string& s){
+        _CS_LOG(s,false);
+        return false;
+        
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -189,25 +303,32 @@ bool Cuma_Client::_file_snd(){
     try{
         Json::StyledWriter J_writ;
         
-        auto f_it = f_frag_lst_.begin();
-        auto f_cli = srv_lst_.begin();
+        auto C_F_frag = f_frag_lst_.begin();
+        auto C_F_srv = srv_lst_.begin();
         
         for(int i = 0; i < srv_lst_.size(); i ++){
             
             //각각 파일 프레임 + 서버 리스트를 묶어서 전송함
-            std::advance(f_it, i);
-            std::advance(f_cli,i);
             
-            string f_snd;
-            f_snd.append(J_writ.write((*f_it)),
-                         J_writ.write((*f_it)).size());
+            std::advance(C_F_frag, i);              //파일 파편화 인덱스
+            std::advance(C_F_srv,i);                //서버 소켓 인덱스
             
-            sockaddr_in sock_temp = f_cli->srv_sck_addr();
-            connect(f_cli->srv_sck(),
+            string f_snd;                           //JSON 전송 버퍼
+            f_snd.append(J_writ.write((*C_F_frag)),
+                         J_writ.write((*C_F_frag)).size());
+            
+            sockaddr_in sock_temp = C_F_srv->srv_sck_addr();
+            
+            if(connect(C_F_srv->srv_sck(),
                     (struct sockaddr*)&sock_temp,
-                    sizeof(f_cli->srv_sck_addr()));
+                       sizeof(C_F_srv->srv_sck_addr()))<0){
+                throw string(_CS_CON_STAT);
+            };
             
-            send(f_cli->srv_sck(), f_snd.c_str(), f_snd.length(), 0);
+            _CS_SND(C_F_srv->srv_sck(), *(&*C_F_frag));
+            _CS_RCV(C_F_srv->srv_sck(), *(&*C_F_frag));
+            
+            
             
         }
         
@@ -218,21 +339,100 @@ bool Cuma_Client::_file_snd(){
     }catch(Json::Exception& e){
         std::cout<<"[Error] : "<<e.what()<<std::endl;
         return false;
+    }catch(const string s){
+        _CS_LOG(s,false);
+        return false;
     }
 }
 
-/*//파일 수신 함수
-bool Cuma_Client::_file_rcv(){
+
+
+
+
+
+
+
+
+
+
+void Cuma_Client::_CS_LOG(const string& s){
+    std::cout<<"[Info] : "<<s<<std::endl;
+}
+
+void Cuma_Client::_CS_LOG(const string& s,unsigned long long siz){
+    std::cout<<"[Info] : "<<s<<" : "<<siz<<std::endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bool Cuma_Client::_CS_SND(const int s, Json::Value& J){
     try{
         
+        Json::StyledWriter _CS_WRI;
+        string _CS_TMP = _CS_WRI.write(J);
+        unsigned long long _CS_TMP_LEN = _CS_TMP.length();
         
+        send(s, &_CS_TMP_LEN, sizeof(unsigned long long), 0);
+        send(s, &_CS_TMP,_CS_TMP.length(),0);
+        
+        _CS_LOG(_CS_SND_CLR, true);
         return true;
+        
     }catch(std::exception& e){
-        std::cout<<"[Error] : "<<e.what()<<std::endl;
-        return false;
-    }catch(Json::Exception& e){
-        std::cout<<"[Error] : "<<e.what()<<std::endl;
+        std::cout<<"[INFO] : "<<e.what()<<std::endl;
+        _CS_LOG(_CS_SND_FAIL, false);
         return false;
     }
     
-}*/
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+bool Cuma_Client::_CS_RCV(const int s, Json::Value& J){
+    
+    try{
+        
+        Json::Reader _CS_RED;
+        unsigned long long _CS_TMP_SIZ;
+        string _CS_TMP_BINARY;
+        
+        recv(s, &_CS_TMP_SIZ, sizeof(unsigned long long),0);
+        
+        shared_ptr<char> _CS_TMP_CHAR(new char[_CS_TMP_SIZ]);
+        recv(s, (&*_CS_TMP_CHAR), _CS_TMP_SIZ,0);
+        
+        _CS_TMP_BINARY.append((&*_CS_TMP_CHAR),_CS_TMP_SIZ);
+        _CS_RED.parse(_CS_TMP_BINARY, J);
+        
+        _CS_LOG(_CS_RCV_CLR, true);
+        
+        return true;
+        
+    }catch(std::exception& e){
+        std::cout<<"[INFO] : "<<e.what()<<std::endl;
+        _CS_LOG(_CS_RCV_FAIL, false);
+        return false;
+    }
+}
