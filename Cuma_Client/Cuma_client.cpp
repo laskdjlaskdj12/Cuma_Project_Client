@@ -265,9 +265,11 @@ bool Cuma_Client::_file_frag(){
             std::cout<<"F_frame_num : "<<(*it)["F_frame_num"].asUInt64()<<std::endl;
             std::cout<<"F_siz : "<<(*it)["F_siz"].asUInt64()<<std::endl;
             std::cout<<"MODE : "<<(*it)["MODE"].asInt()<<std::endl;             //mode 0 = READ_BINARY,
-                                                                                //mode 1 = WRITE_BINARY
+            //mode 1 = WRITE_BINARY
             
         }
+        _CS_LOG(C_F_FLE_SHOW_FRAAME);
+        
         return true;
         
     }catch(std::exception& e){
@@ -302,6 +304,7 @@ bool Cuma_Client::_file_frag(){
 bool Cuma_Client::_file_snd(){
     try{
         Json::StyledWriter J_writ;
+        Json::Value Con_Chk;                       //json형식으로 응답을 받음
         
         auto C_F_frag = f_frag_lst_.begin();
         auto C_F_srv = srv_lst_.begin();
@@ -320,19 +323,27 @@ bool Cuma_Client::_file_snd(){
             sockaddr_in sock_temp = C_F_srv->srv_sck_addr();
             
             if(connect(C_F_srv->srv_sck(),
-                    (struct sockaddr*)&sock_temp,
+                       (struct sockaddr*)&sock_temp,
                        sizeof(C_F_srv->srv_sck_addr()))<0){
                 throw string(_CS_CON_STAT);
             };
+            _CS_LOG(_CS_CON_STAT,true);
             
-            _CS_SND(C_F_srv->srv_sck(), *(&*C_F_frag));
-            _CS_RCV(C_F_srv->srv_sck(), *(&*C_F_frag));
+            //서버에서 접속 응답을 받음
+            _CS_RCV(C_F_srv->srv_sck(), Con_Chk);
+            _CS_LOG(_CS_CON_SRV_RCV,true);
             
-            
-            
+            //만약 서버에서 에러를 응답했을경우
+            if(Con_Chk["RCV_ERR"].isObject()){
+                throw string(_CS_CON_SRV_STAT);
+            }else{
+                if(_CS_SND(C_F_srv->srv_sck(), *(&*C_F_frag)) != true){ throw string(_CS_SND_FAIL); };
+                if(_CS_RCV(C_F_srv->srv_sck(), *(&*C_F_frag)) != true){ throw string(_CS_RCV_FAIL); };
+            }
         }
         
         return true;
+        
     }catch(std::exception& e){
         std::cout<<"[Error] : "<<e.what()<<std::endl;
         return false;

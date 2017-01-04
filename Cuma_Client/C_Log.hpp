@@ -20,6 +20,7 @@
 #define C_F_FLE_BNYSIZ      "Cuma_Client _file_binary_SIZ"
 #define C_F_FLE_EACH_FRM_COUNT     "Cuma_Client _file_EACH_Frame_count"
 #define C_F_FLE_SPLT_FRAME  "Cuma_Client _file_splite_Frame"
+#define C_F_FLE_SHOW_FRAAME  "Cuma_Client _Frame_show_Complete"
 
 
 
@@ -29,6 +30,8 @@
 #define _CS_RCV_CLR     "Cuma_Client _CS_SND_CLR"
 #define _CS_RCV_FAIL    "Cuma_Client _CS_SND_FAIL"
 
+#define _CS_CON_SRV_STAT "Cuma_Server _CA_SRV_FULL QUEUE"
+#define _CS_CON_SRV_RCV  "Cuma_Server _RCV_CONNECT"
 
 
 
