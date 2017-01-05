@@ -21,10 +21,10 @@
 #define C_F_FLE_EACH_FRM_COUNT     "Cuma_Client _file_EACH_Frame_count"
 #define C_F_FLE_SPLT_FRAME  "Cuma_Client _file_splite_Frame"
 #define C_F_FLE_SHOW_FRAAME  "Cuma_Client _Frame_show_Complete"
+#define C_F_FLE_SND_SERVER_CLR "Cuma_Client _Send_Server_List_Clear"
 
 
-
-#define _CS_CON_STAT    "Cuma_Client _CS_CONN"
+#define _CS_CON_STAT    "Cuma_Client _CS_CONN connection"
 #define _CS_SND_CLR     "Cuma_Client _CS_SND_CLR"
 #define _CS_SND_FAIL    "Cuma_Client _CS_SND_FAIL"
 #define _CS_RCV_CLR     "Cuma_Client _CS_SND_CLR"

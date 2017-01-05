@@ -10,8 +10,8 @@
 #define Error_Binary_h
 
 //BINARY MODE
-#define READ_BINARY 0
-#define WRITE_BINARY 1
+#define READ_BINARY 1
+#define WRITE_BINARY 2
 
 
 //ERR_NOTICE

@@ -161,6 +161,8 @@ bool Cuma_Client::send_server_list(){
     if(_file_snd() != true){
         _CS_LOG(C_F_FLE_SND,false);
     }
+    _CS_LOG(C_F_FLE_SND_SERVER_CLR);
+    
     return true;
 }
 
@@ -235,17 +237,9 @@ bool Cuma_Client::_file_frag(){
             Json::Value f_val;
             f_val["F_name"] = f_name_;
             f_val["F_frame_num"] = i;
-            
             //만약 해당 프레임 범위가 파일 바이너리 버퍼 크기를 벗어났을 경우 바이너리 버퍼 크기만큼 분할 사이즈를 설정
-            if(i * f_fme_siz_ > f_buff_.size()){
-                f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) ,
-                                                   f_buff_.size());
-            }else{
-                f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) ,
-                                                   (i+1) * f_fme_siz_);
-            }
-            
-            
+            if(i * f_fme_siz_ > f_buff_.size()){ f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) , f_buff_.size());}
+            else{ f_val["F_binary"] = f_buff_.substr( (i * f_fme_siz_) , (i+1) * f_fme_siz_); }
             f_val["F_siz"] = f_fme_siz_;
             f_val["MODE"] = WRITE_BINARY;
             
@@ -329,17 +323,24 @@ bool Cuma_Client::_file_snd(){
             };
             _CS_LOG(_CS_CON_STAT,true);
             
+            
             //서버에서 접속 응답을 받음
             _CS_RCV(C_F_srv->srv_sck(), Con_Chk);
             _CS_LOG(_CS_CON_SRV_RCV,true);
             
             //만약 서버에서 에러를 응답했을경우
-            if(Con_Chk["RCV_ERR"].isObject()){
-                throw string(_CS_CON_SRV_STAT);
-            }else{
-                if(_CS_SND(C_F_srv->srv_sck(), *(&*C_F_frag)) != true){ throw string(_CS_SND_FAIL); };
-                if(_CS_RCV(C_F_srv->srv_sck(), *(&*C_F_frag)) != true){ throw string(_CS_RCV_FAIL); };
+            if(Con_Chk["RCV_ERR"].isObject()){  throw string(_CS_CON_SRV_STAT); }
+            
+            //만약 서버에서 에러를 응답하지 않았을 경우
+            if(_CS_SND(C_F_srv->srv_sck(), *(&*C_F_frag)) != true){ throw string(_CS_SND_FAIL); };
+            if(_CS_RCV(C_F_srv->srv_sck(), *(&*C_F_frag)) != true){ throw string(_CS_RCV_FAIL); };
+            
+            //만약 서버측 응답이 Error일 경우
+            if((*(&*C_F_frag)).isMember("Error") != false){
+                std::cout<<"[Error] : Server _ "<<(*(&*C_F_frag))["Raseon"].asCString()<<std::endl;
             }
+            
+            
         }
         
         return true;
@@ -395,7 +396,8 @@ bool Cuma_Client::_CS_SND(const int s, Json::Value& J){
         unsigned long long _CS_TMP_LEN = _CS_TMP.length();
         
         send(s, &_CS_TMP_LEN, sizeof(unsigned long long), 0);
-        send(s, &_CS_TMP,_CS_TMP.length(),0);
+        
+        send(s, _CS_TMP.c_str(),(_CS_TMP.length()),0);
         
         _CS_LOG(_CS_SND_CLR, true);
         return true;
