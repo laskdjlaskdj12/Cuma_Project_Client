@@ -118,15 +118,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cuma_Client/Cuma_client.cpp"
-            timestampString = "505295973.990578"
+            timestampString = "505312862.669165"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
             landmarkName = "Cuma_Client::_file_snd()"
             landmarkType = "7">
          </BreakpointContent>
@@ -134,16 +134,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Cuma_Client/Cuma_client.cpp"
-            timestampString = "505297013.037346"
+            timestampString = "505407583.524259"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "397"
+            endingLineNumber = "397"
             landmarkName = "Cuma_Client::_CS_SND(const int s, Json::Value&amp; J)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Cuma_Client/Cuma_client.cpp"
+            timestampString = "505405902.74426"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
+            landmarkName = "Cuma_Client::send_server_list()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

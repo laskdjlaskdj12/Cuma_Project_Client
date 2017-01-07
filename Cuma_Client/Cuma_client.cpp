@@ -58,19 +58,17 @@ void Cuma_Client::set_active(bool b){
 //파일 선택
 void Cuma_Client::set_file_name(const string path){
     
-    ifstream o_file(path,std::ios::binary);
+    ifstream CS_FILE(path,std::ios::binary);
     
-    if(o_file.is_open() != true){
-        
-        std::cout<<"[Info] : Wrong Path"<<std::endl;
-        
-        o_file.close();
+    if(CS_FILE.is_open() != true){
+        _CS_LOG(C_F_OPEN_FALSE);
+        CS_FILE.close();
         return;
     }
     
     f_name_ = path;
     
-    o_file.close();
+    CS_FILE.close();
     
     _CS_LOG(C_F_OPEN);
 }
@@ -338,11 +336,16 @@ bool Cuma_Client::_file_snd(){
             //만약 서버측 응답이 Error일 경우
             if((*(&*C_F_frag)).isMember("Error") != false){
                 std::cout<<"[Error] : Server _ "<<(*(&*C_F_frag))["Raseon"].asCString()<<std::endl;
+                throw string(_CS_SRV_RCV);
             }
             
+            //서버가 성공적으로 저장됨을 알림
+            std::cout<<"[Info] : Recv_Serv : ["<<inet_ntoa(C_F_srv->srv_sck_addr().sin_addr)<<"] : ";
+            std::cout<<(*(&*C_F_frag))["F_name"].asString();
+            std::cout<<" : "<<(*(&*C_F_frag))["F_siz"].asUInt64()<<" byte "<<std::endl;
             
+            std::cout<<"[Info] : SRV_SUCCES_SAVE_frame"<<std::endl;
         }
-        
         return true;
         
     }catch(std::exception& e){
@@ -371,11 +374,14 @@ void Cuma_Client::_CS_LOG(const string& s){
     std::cout<<"[Info] : "<<s<<std::endl;
 }
 
-void Cuma_Client::_CS_LOG(const string& s,unsigned long long siz){
+void Cuma_Client::_CS_LOG(const string& s , unsigned long long siz){
     std::cout<<"[Info] : "<<s<<" : "<<siz<<std::endl;
 }
 
-
+/*void Cuma_Client::_CS_LOG(const string& s , bool a){
+    if(a != true){  std::cout<<"[Info] : "<<s<<" : "<<"fail"<<std::endl;}
+    else{ std::cout<<"[Info] : "<<s<<" : "<<"clear"<<std::endl;}
+}*/
 
 
 

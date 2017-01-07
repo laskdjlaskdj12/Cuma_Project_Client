@@ -76,7 +76,8 @@ private:
     
 private:
     void _CS_LOG(const string& s);
-    void _CS_LOG(const string& s,unsigned long long siz);
+    void _CS_LOG(const string& s , unsigned long long siz);
+    //void _CS_LOG(const string& s , const bool a);
     
     bool _CS_SND( const int s, Json::Value& J);
     bool _CS_RCV( const int s, Json::Value& J);
