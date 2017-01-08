@@ -13,7 +13,8 @@
 
 
 int main(int argc, const char * argv[]) {
-    shared_ptr<Cuma_Client> c(new Cuma_Client);
+    Cuma_Client c;
+    
     
     /*while(c->is_active()){
         int panel = 0;
@@ -76,10 +77,10 @@ int main(int argc, const char * argv[]) {
     exit(1);*/
     
     
-    c->start();
+    c.start();
     
-    c->add_server_lst("127.0.0.1", 33391);
-    c->set_file_name("test.txt");
+    c.add_server_lst("127.0.0.1", 33391);
+    c.set_file_name("test.txt");
     
     //c->add_server_lst("127.0.0.1", 33391);
     //c->add_server_lst("127.0.0.1", 33392);
@@ -87,8 +88,8 @@ int main(int argc, const char * argv[]) {
     //c->add_server_lst("127.0.0.1", 33394);
     //c->add_server_lst("127.0.0.1", 33395);
     
-    c->show_server_list();
+    c.show_server_list();
     
-    c->send_server_list();
+    c.send_server_list();
     
 }
