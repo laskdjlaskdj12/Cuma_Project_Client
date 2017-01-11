@@ -16,7 +16,7 @@ int main(int argc, const char * argv[]) {
     Cuma_Client c;
     
     
-    /*while(c->is_active()){
+    /*while(c.is_active()){
         int panel = 0;
         while(panel != 0){
             std::cout<<"[0] : insert_Server" <<std::endl;
@@ -40,7 +40,7 @@ int main(int argc, const char * argv[]) {
                 std::cout<<"Server_ip: <<"; std::cin>>ip;
                 std::cout<<"Server_port: "; std::cin>>prt;
                 
-                c->add_server_lst(ip, prt);
+                c.add_server_lst(ip, prt);
                 break;
             }
             case 1:{
@@ -48,26 +48,26 @@ int main(int argc, const char * argv[]) {
                 
                 std::cout<<"File_Path: <<"; std::cin>>f_p;
                 
-                c->set_file_name(f_p);
+                c.set_file_name(f_p);
                 
                 break;
             }
             case 2:{
-                c->show_server_list();
+                c.show_server_list();
                 break;
             }
             case 3:{
-                c->start();
-                c->send_server_list();
+                c.start();
+                c.send_server_list();
                 break;
             }
             case 4:{
-                c->stop();
+                c.stop();
                 break;
             }
             default:{
                 std::cout<<"[Error] : Wrong_index"<<std::endl;
-                c->stop();
+                c.stop();
                 break;
             }
         }
@@ -79,14 +79,16 @@ int main(int argc, const char * argv[]) {
     
     c.start();
     
-    c.add_server_lst("127.0.0.1", 33391);
-    c.set_file_name("test.txt");
     
-    //c->add_server_lst("127.0.0.1", 33391);
-    //c->add_server_lst("127.0.0.1", 33392);
-    //c->add_server_lst("127.0.0.1", 33393);
-    //c->add_server_lst("127.0.0.1", 33394);
-    //c->add_server_lst("127.0.0.1", 33395);
+    c.add_server_lst("127.0.0.1", 33390);
+    c.add_server_lst("127.0.0.1", 33391);
+    c.add_server_lst("127.0.0.1", 33392);
+    c.add_server_lst("127.0.0.1", 33393);
+    
+    if(!c.set_file_name("onm-source.zip")){
+        std::cout<<"[Error]: There is no file"<<std::endl;
+        exit(1);
+    }
     
     c.show_server_list();
     

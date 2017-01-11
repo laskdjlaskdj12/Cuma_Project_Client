@@ -58,7 +58,7 @@ public:
     void set_active(bool b);
     
     //파일 선택
-    void set_file_name(const string path);
+    bool set_file_name(const string path);
     string file_name();
     
     //서버리스트
@@ -81,6 +81,8 @@ private:
     
     bool _CS_SND( const int s, Json::Value& J);
     bool _CS_RCV( const int s, Json::Value& J);
+    
+    void _CS_INDI(unsigned long long f_siz, unsigned long long snd_siz);
     
     
 private:
