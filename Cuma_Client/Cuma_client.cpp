@@ -232,7 +232,7 @@ bool Cuma_Client::_file_frag(){
         for( int i = 0 ; i < srv_lst_.size()+1; i++){
             
             Json::Value f_val;
-            f_val["F_name"] = f_name_+".Cuma_Client";
+            f_val["F_name"] = (f_name_+".Cuma_Client"+ std::to_string(i));
             f_val["F_frame_num"] = i;
             //만약 해당 프레임 범위가 파일 바이너리 버퍼 크기를 벗어났을 경우 바이너리 버퍼 크기만큼 분할 사이즈를 설정
             if(i * f_fme_siz_ > f_buff_.size()){
@@ -298,7 +298,10 @@ bool Cuma_Client::_file_frag(){
 bool Cuma_Client::_file_snd(){
     try{
         Json::StyledWriter J_writ;
-        Json::Value Con_Chk;                       //json형식으로 응답을 받음
+        Json::Value Con_Chk;                                               //json형식으로 응답을 받음
+        Json::Value J_Frag_save;                                           //파편화 캐시 저장
+        Json::Value J_Frag_addr;
+        
         
         for(int i = 0; i<srv_lst_.size(); i++){
             auto C_F_srv_tmp = srv_lst_.begin();
@@ -308,16 +311,23 @@ bool Cuma_Client::_file_snd(){
         }
         
         
-        for(int i = 0; i < srv_lst_.size(); i ++){
+        for(int i = 0; i < f_frag_lst_.size(); i ++){
             auto C_F_frag = f_frag_lst_.begin();
             auto C_F_srv = srv_lst_.begin();
             
+        
             //각각 파일 프레임 + 서버 리스트를 묶어서 전송함
-            std::advance(C_F_frag, i);              //파일 파편화 인덱스
-            std::advance(C_F_srv,  i);                //서버 소켓 인덱스
+            std::advance(C_F_frag, i);                                      //파일 파편화 인덱스
+            std::advance(C_F_srv,  (i % (srv_lst_.size())));                //서버 소켓 인덱스
             
             
-            string f_snd;                           //JSON 전송 버퍼
+            
+            //json프레임 저장
+            J_Frag_addr.clear();                                            //Json 버퍼를 clear하고
+            J_Frag_addr["F_addr"].append(inet_ntoa(C_F_srv->srv_sck_addr().sin_addr));
+            J_Frag_save[(*C_F_frag)["F_name"].asString()].append(J_Frag_addr);
+            
+            string f_snd;                                                   //JSON 전송 버퍼
             f_snd.append(J_writ.write((*C_F_frag)),
                          J_writ.write((*C_F_frag)).size());
             
@@ -349,15 +359,23 @@ bool Cuma_Client::_file_snd(){
                 std::cout<<"[Error] : Server _ "<<(*(&*C_F_frag))["Raseon"].asCString()<<std::endl;
                 throw string(_CS_SRV_RCV);
             }
-            
             //서버가 성공적으로 저장됨을 알림
             std::cout<<"[Info] : Recv_Serv : ["<<inet_ntoa(C_F_srv->srv_sck_addr().sin_addr)<<": "<<htons(C_F_srv->srv_sck_addr().sin_port)<<"] :";
             std::cout<<(*(&*C_F_frag))["F_name"].asString();
             std::cout<<" : "<<(*(&*C_F_frag))["F_siz"].asUInt64()<<" byte "<<std::endl;
             
+            
             std::cout<<"[Info] : SRV_SUCCES_SAVE_frame"<<std::endl;
         }
         
+        ofstream w_binary(J_Frag_save["F_name"].asString());
+        string w_temp = J_writ.write(J_Frag_save);
+        w_binary.write(w_temp.c_str(), w_temp.size());
+        
+        w_temp.clear();
+        Con_Chk.clear();
+        J_Frag_save.clear();
+        J_Frag_addr.clear();
         
         return true;
         
