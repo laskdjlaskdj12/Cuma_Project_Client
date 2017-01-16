@@ -11,6 +11,7 @@
 		505D91C01E164CF40012FBC1 /* Cuma_client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505D91BE1E164CF40012FBC1 /* Cuma_client.cpp */; };
 		505D91C51E17F8FA0012FBC1 /* Cuma_Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505D91C31E17F8FA0012FBC1 /* Cuma_Block.cpp */; };
 		505D91CA1E1805600012FBC1 /* Cli_Sck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505D91C81E1805600012FBC1 /* Cli_Sck.cpp */; };
+		509D2BFE1E2B3A86008A06E2 /* Cuma_Frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509D2BFC1E2B3A86008A06E2 /* Cuma_Frame.cpp */; };
 		50F6C83E1E1B441100DE8C47 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6C83D1E1B441100DE8C47 /* jsoncpp.cpp */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +36,8 @@
 		505D91C41E17F8FA0012FBC1 /* Cuma_Block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cuma_Block.hpp; sourceTree = "<group>"; };
 		505D91C81E1805600012FBC1 /* Cli_Sck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cli_Sck.cpp; sourceTree = "<group>"; };
 		505D91C91E1805600012FBC1 /* Cli_Sck.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cli_Sck.hpp; sourceTree = "<group>"; };
+		509D2BFC1E2B3A86008A06E2 /* Cuma_Frame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cuma_Frame.cpp; sourceTree = "<group>"; };
+		509D2BFD1E2B3A86008A06E2 /* Cuma_Frame.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cuma_Frame.hpp; sourceTree = "<group>"; };
 		50F6C83D1E1B441100DE8C47 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = "../../../../../xcode/jsoncpp-master/dist/jsoncpp.cpp"; sourceTree = "<group>"; };
 		50F6C83F1E1B478C00DE8C47 /* Error_Binary.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Error_Binary.hpp; sourceTree = "<group>"; };
 		50F6C8431E1BAA5B00DE8C47 /* C_Log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = C_Log.hpp; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 		505D91B31E1504E80012FBC1 /* Cuma_Client */ = {
 			isa = PBXGroup;
 			children = (
+				509D2BFB1E2B3A69008A06E2 /* Cuma_Frame */,
 				50F6C8451E1BAB7C00DE8C47 /* Error_Define */,
 				50F6C83D1E1B441100DE8C47 /* jsoncpp.cpp */,
 				505D91B41E1504E80012FBC1 /* main.cpp */,
@@ -87,6 +91,16 @@
 				505D91C41E17F8FA0012FBC1 /* Cuma_Block.hpp */,
 			);
 			name = NO_USE;
+			sourceTree = "<group>";
+		};
+		509D2BFB1E2B3A69008A06E2 /* Cuma_Frame */ = {
+			isa = PBXGroup;
+			children = (
+				509D2BFC1E2B3A86008A06E2 /* Cuma_Frame.cpp */,
+				509D2BFD1E2B3A86008A06E2 /* Cuma_Frame.hpp */,
+			);
+			name = Cuma_Frame;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		50F6C8401E1BA9F200DE8C47 /* Log */ = {
@@ -179,6 +193,7 @@
 				505D91CA1E1805600012FBC1 /* Cli_Sck.cpp in Sources */,
 				505D91B51E1504E80012FBC1 /* main.cpp in Sources */,
 				505D91C51E17F8FA0012FBC1 /* Cuma_Block.cpp in Sources */,
+				509D2BFE1E2B3A86008A06E2 /* Cuma_Frame.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

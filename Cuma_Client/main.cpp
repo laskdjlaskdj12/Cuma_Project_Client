@@ -79,11 +79,22 @@ int main(int argc, const char * argv[]) {
     
     c.start();
     
+    bool send = false;
     
-    c.add_server_lst("127.0.0.1", 33390);
-    c.add_server_lst("127.0.0.1", 33391);
-    c.add_server_lst("127.0.0.1", 33392);
-    c.add_server_lst("127.0.0.1", 33393);
+    if(send){
+        c.add_server_lst("127.0.0.1", 33390);
+        
+        if(!c.set_file_name("onm-source.zip")){
+            std::cout<<"[Error]: There is no file"<<std::endl;
+            exit(1);
+        }
+        
+        c.show_server_list();
+        c.send_to_server_list();
+        
+        return 0;
+    }
+    
     
     if(!c.set_file_name("onm-source.zip")){
         std::cout<<"[Error]: There is no file"<<std::endl;
@@ -91,7 +102,6 @@ int main(int argc, const char * argv[]) {
     }
     
     c.show_server_list();
-    
-    c.send_server_list();
+    c.recv_from_server_list();
     
 }

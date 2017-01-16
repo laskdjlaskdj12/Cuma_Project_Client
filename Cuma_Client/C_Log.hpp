@@ -29,8 +29,13 @@
 #define C_F_FLE_SHOW_FRAAME  "Cuma_Client _Frame_show_Complete"
 #define C_F_FLE_SND_SERVER_CLR "Cuma_Client _Send_Server_List_Clear"
 
+#define C_F_FLE_INIT      "Cuma_Client_File_assembly"
+#define C_F_FLE_FRAG_READ "Cuma_Client_RECV_FRAG"
+#define C_F_FLE_RCV         "Cuma_Client_Recv_file"
+#define C_F_FILE_RECV_SERVER_CLR "Cuma_Client_RECV_SERVER_CLR"
 
 #define _CS_CON_STAT    "Cuma_Client _CS_CONN connection"
+#define _CS_CON_FAIL    "Cuma_Client connect fail"
 #define _CS_SND_CLR     "Cuma_Client _CS_SND_CLR"
 #define _CS_SND_FAIL    "Cuma_Client _CS_SND_FAIL"
 #define _CS_RCV_CLR     "Cuma_Client _CS_SND_CLR"
@@ -41,6 +46,8 @@
 
 
 #define _CS_SRV_RCV  "Cuma_Server _RCV_CONNECT_ERROR"
+
+#define _CS_FRAME_LOG "Cuma_Client _success_frame_log_file"
 
 
 #elif KOR
@@ -60,9 +67,11 @@
 #define C_F_FLE_SPLT_FRAME  "Cuma_Client 파일 파편화 프레임"
 #define C_F_FLE_SHOW_FRAAME  "Cuma_Client 프레임 오픈 완료"
 #define C_F_FLE_SND_SERVER_CLR "Cuma_Client 등록 서버 리스트"
+#define C_F_FLE_INIT
 
 
 #define _CS_CON_STAT    "Cuma_Client 서버 연결 connection"
+#define _CS_CON_FAIL    "Cuma_Client 접속 실패"
 #define _CS_SND_CLR     "Cuma_Client 서버 전송 완료"
 #define _CS_SND_FAIL    "Cuma_Client 서버 전송 실패"
 #define _CS_RCV_CLR     "Cuma_Client 서버에서 전송 완료"
