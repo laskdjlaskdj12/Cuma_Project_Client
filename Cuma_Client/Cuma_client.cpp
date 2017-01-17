@@ -44,7 +44,9 @@ void Cuma_Client::set_active(bool b){
     active_ = b;
 }
 
-
+void Cuma_Client::set_mode(int n){
+    mode_ = n;
+}
 
 
 
@@ -58,6 +60,8 @@ void Cuma_Client::set_active(bool b){
 //파일 선택
 bool Cuma_Client::set_file_name(const string path){
     
+    //만약 mode_가 WRITE_BINARY일때
+    if(mode_ == WRITE_BINARY){
     ifstream CS_FILE(path,std::ios::binary);
     
     if(CS_FILE.is_open() != true){
@@ -71,6 +75,11 @@ bool Cuma_Client::set_file_name(const string path){
     CS_FILE.close();
     
     _CS_LOG(C_F_OPEN);
+        
+    }else{
+        f_name_ = path;
+    }
+    
     return true;
 }
 
@@ -213,7 +222,7 @@ bool Cuma_Client::_file_frag(){
     try{
         
         ifstream r_file;
-        unsigned long long f_siz;
+        unsigned long long f_siz = 0;
         char* f_chr_to_str_tmp = new char[512];
         int frag_bit = 0;
         
@@ -256,8 +265,9 @@ bool Cuma_Client::_file_frag(){
         //등록된 서버 리스트수대로 프레임 파일을 생성후 f_frag_lst 에 저장
         for( int i = 0 ; i < srv_lst_.size() + frag_bit ; i++){
             
+            //프래그먼트에 파일 이름을 설정함
             Cuma_Frame F;
-            
+            F.set_f_name(f_name_);
             F.set_fr_name( f_name_ + ".Cuma_Client" + std::to_string( i ) );
             F.set_fr_num( i );
             
@@ -429,9 +439,9 @@ bool Cuma_Client::_file_snd(){
         std::stringstream f_name;
         f_name<<f_r_send_lst["F_name"].asString()<<".Cuma";
         
-        std::cout<<"=========== Debug Json ============="<<std::endl;
+       /* std::cout<<"=========== Debug Json ============="<<std::endl;
         std::cout<<f_r_send_lst<<std::endl;
-        std::cout<<"=========== End Json ============="<<std::endl;
+        std::cout<<"=========== End Json ============="<<std::endl;*/
         
         
         w_binary.open(f_name.str(), std::ios::beg);
@@ -595,7 +605,7 @@ bool Cuma_Client::_file_rcv(){
             
             
             //만약 서버 접속수 RCV_ERR가 리턴이 됬을시
-            if(CS_CON_STAT["RCV_ERR"].isObject()){ throw string(_CS_CON_FAIL);}
+            if(CS_CON_STAT["Error"].isObject()){ throw string(_CS_CON_FAIL);}
             
             
             //수신을 받을 프레임들을 받을 리스트를 작성
@@ -614,6 +624,9 @@ bool Cuma_Client::_file_rcv(){
                 throw string(_CS_SRV_RCV);
             }
             
+            //std::cout<<"[Debug] : "<<CS_RCV<<std::endl;
+            
+            //프레임에 json을 입력
             Cuma_Frame Res_frame;
             Res_frame.set_fr_json(CS_RCV);
             Res_frame.json_to_mem();
@@ -664,14 +677,17 @@ bool Cuma_Client::_file_combine(){
                 
                 if(ite -> fr_num() == i){
                     
-                    w_bin.append(ite->fr_binary().c_str() , ite->fr_siz());
+                    std::cout<<"[Debug] : fr_binary size = "<<(ite->fr_binary()).size()<<", fr_size = "<<(ite)->fr_siz()<<std::endl;
+                    
+                    
+                    w_bin.append((ite->fr_binary()).c_str() , ite->fr_siz());
                     
                     break;
                 }
             }
         }
         
-        ofstream f_writ(f_name_,std::ios::binary);
+        ofstream f_writ(f_name_,std::ios::binary | std::ios::beg);
         
         f_writ.write(w_bin.c_str(), w_bin.size());
         
@@ -754,19 +770,38 @@ bool Cuma_Client::_CS_RCV(const int s, Json::Value& J){
     
     try{
         
+        //JSON::READER
         Json::Reader _CS_RED;
-        unsigned long long _CS_TMP_SIZ;
+        unsigned long _CS_TMP_SIZ;
         string _CS_TMP_BINARY;
+        char* _CS_TMP_CHAR;
         
-        recv(s, &_CS_TMP_SIZ, sizeof(unsigned long long),0);
+        unsigned long rcv_temp = 0;
+        unsigned long rcv_temp1 = 0;
         
-        shared_ptr<char> _CS_TMP_CHAR(new char[_CS_TMP_SIZ]);
-        recv(s, (&*_CS_TMP_CHAR), _CS_TMP_SIZ,0);
+        //사이즈를 수신받음
+        recv(s, &_CS_TMP_SIZ, sizeof(unsigned long),0);
         
-        _CS_TMP_BINARY.append((&*_CS_TMP_CHAR),_CS_TMP_SIZ);
+        //바이트 크기를 할당함
+        _CS_TMP_CHAR = (new char[_CS_TMP_SIZ]);
+        memset(_CS_TMP_CHAR, 0, _CS_TMP_SIZ);
+        
+        //수신이 완료가 될때까지 string으로 수신
+        while( rcv_temp < _CS_TMP_SIZ ){
+            
+            rcv_temp1 = recv(s, _CS_TMP_CHAR, _CS_TMP_SIZ,0);
+            rcv_temp += rcv_temp1;
+            
+            _CS_TMP_BINARY.append( _CS_TMP_CHAR , rcv_temp1);
+            
+        }
+        
+        //json으로 변환
         _CS_RED.parse(_CS_TMP_BINARY, J);
         
         _CS_LOG(_CS_RCV_CLR, true);
+        
+        delete[] _CS_TMP_CHAR;
         
         return true;
         

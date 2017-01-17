@@ -62,6 +62,7 @@ public:
     void stop();
     bool is_active();
     void set_active(bool b);
+    void set_mode(int n);
     
     //파일 선택
     bool set_file_name(const string path);
@@ -116,7 +117,7 @@ private:
     Json::Value f_r_send_lst;           //전송한 파일 리스트 읽기
     Json::Value frame_save_lst;           //.Cuma파일 에서 읽은후 저장되어있는 파일 프레임 리스트
     bool active_;
-    
+    int mode_;
     
 };
 
