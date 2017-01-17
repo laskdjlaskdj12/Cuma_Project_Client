@@ -84,7 +84,7 @@ int main(int argc, const char * argv[]) {
     if(send){
         c.add_server_lst("127.0.0.1", 33390);
         
-        if(!c.set_file_name("ciera.png")){
+        if(!c.set_file_name("onm-source.zip")){
             std::cout<<"[Error]: There is no file"<<std::endl;
             exit(1);
         }
@@ -96,7 +96,7 @@ int main(int argc, const char * argv[]) {
     }
     
     
-    if(!c.set_file_name("ciera.png")){
+    if(!c.set_file_name("onm-source.zip")){
         std::cout<<"[Error]: There is no file"<<std::endl;
         exit(1);
     }
