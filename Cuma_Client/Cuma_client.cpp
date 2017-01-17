@@ -223,7 +223,7 @@ bool Cuma_Client::_file_frag(){
         
         ifstream r_file;
         unsigned long long f_siz = 0;
-        char* f_chr_to_str_tmp = new char[512];
+        char* f_chr_to_str_tmp;
         int frag_bit = 0;
         
         
@@ -232,23 +232,15 @@ bool Cuma_Client::_file_frag(){
         _CS_LOG(C_F_FLE_SND,true);
         
         //파일 크기 탐색
-        r_file.seekg(std::ios::beg,std::ios::end);
+        r_file.seekg(0,ifstream::end);
         f_siz = r_file.tellg();
-        r_file.seekg(std::ios::beg);
+        r_file.seekg(0,ifstream::beg);
         _CS_LOG(C_F_FLE_SIZ,f_siz);
         
         //파일 이 eof될때가지 바이너리로 읽기
-        while(!r_file.eof()){
-            
-            //char 512바이트 파일버퍼 초기화
-            memset(f_chr_to_str_tmp, 0, 512);
-            
-            //char로 된 f_tmp에 512바이트를 읽음
-            r_file.read(f_chr_to_str_tmp, 512);
-            
-            //f_buff_에 읽은 512바이트를 읽음
-            f_buff_temp_.append(f_chr_to_str_tmp,512);
-        }
+        f_chr_to_str_tmp = new char[f_siz];
+        r_file.read(f_chr_to_str_tmp, f_siz);
+        
         _CS_LOG(C_F_FLE_BNYSIZ,f_buff_temp_.size());
         
         
