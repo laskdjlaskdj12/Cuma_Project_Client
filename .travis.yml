@@ -2,3 +2,5 @@ language: cpp
 script: scons
 compiler:
  - clang
+os:
+ - unix
