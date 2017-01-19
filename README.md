@@ -12,3 +12,5 @@ When if nessary to Send the file Cuma_Client get cutting the file frame amount o
 and Server received the file frame as Client sendding the Server list.
 
 As Client have request the file, Then Downloaded the file frame by Sever and combine the file fragment to make file.
+
+Copyright laskdjlaskdj12@gmail.com allright reserved
