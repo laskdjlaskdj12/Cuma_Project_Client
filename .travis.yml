@@ -3,4 +3,4 @@ sudo: required
 compiler:
  - clang
 os:
- - unix
+ - osx
