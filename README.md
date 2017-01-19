@@ -1,5 +1,4 @@
 
-[[https://travis-ci.org/laskdjlaskdj12/Cuma_Project_Client.svg?branch=master]]
 
 #Cuma_Client_Remake
 
