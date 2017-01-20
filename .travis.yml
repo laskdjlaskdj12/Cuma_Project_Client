@@ -1,6 +1,6 @@
 language: cpp
 sudo: required
-script: make
+script: cmake
 compiler:
  - clang
 os:
