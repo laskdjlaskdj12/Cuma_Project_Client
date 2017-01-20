@@ -1,5 +1,7 @@
 language: cpp
 sudo: required
+before_install:
+  - sudo apt-get install cmake
 script: cmake
 compiler:
  - clang
