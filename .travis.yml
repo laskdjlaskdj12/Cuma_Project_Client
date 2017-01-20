@@ -4,6 +4,6 @@ before_install:
   - sudo apt-get install cmake
 script: cmake
 compiler:
- - clang
+ - clang++
 os:
  - osx
