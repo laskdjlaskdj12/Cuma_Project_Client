@@ -14,14 +14,21 @@ cmake_minimum_required (VERSION 2.6)
 project (Cuma_Client_Remake)
 set(CMAKE_MACOSX_RPATH 1)
 
+# add Current_directory
+include_directories ("${PROJECT_SOURCE_DIR}")
+
 # add Sub_directory
 include_directories ("${PROJECT_SOURCE_DIR}/Cuma_Client")
 
 # jsoncpp header include
-include_directories ("${PROJECT_SOURCE_DIR}/dist")
+include_directories("${CMAKE_SOURCE_DIR}/dist"
+    "${CMAKE_SOURCE_DIR}/dist/json")
+
+add_library (Json_obj SHARED "${PROJECT_SOURCE_DIR}/dist/jsoncpp.cpp")
 
 # 프레임
 add_library (Frame_obj SHARED "${PROJECT_SOURCE_DIR}/Cuma_Frame.cpp")
+target_link_libraries(Frame_obj Json_obj)
 
 #소켓
 add_library (Socket_obj SHARED "${PROJECT_SOURCE_DIR}/Cuma_Client/Cli_Sck.cpp")
