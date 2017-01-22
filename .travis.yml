@@ -1,7 +1,4 @@
 language: cpp
-sudo: required
-before_install:
-  - sudo brew install cmake
 script: cmake
 compiler:
  - clang++
