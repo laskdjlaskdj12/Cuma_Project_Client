@@ -1,6 +1,11 @@
 language: cpp
+
+before_script:
+  - wget https://github.com/open-source-parsers/jsoncpp -O /tmp
+  - python amalgamate.py
+  
 script: 
- - brew install jsoncpp
+ - mv /tmp/jsoncpp/dist /Users/travis/build/laskdjlaskdj12/Cuma_Project_Client/
  - cmake .
 compiler:
  - clang++
