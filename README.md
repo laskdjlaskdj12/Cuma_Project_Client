@@ -32,8 +32,8 @@ About this Source is Client prototype Source that include Basic Core functional.
 
 ##Install Guide
 
-1.download Jsoncpp package from https://github.com/open-source-parsers/jsoncpp
-   ex) wget https://github.com/open-source-parsers/jsoncpp
+1.download Jsoncpp package from "https://github.com/open-source-parsers/jsoncpp"
+   ex) wget "https://github.com/open-source-parsers/jsoncpp"
 2. repackage the Jsoncpp for generate header and source file
     ex) python amalgamate.py
 3. move the "Jsoncpp/dist" directory to "{Project_Loc}/"
