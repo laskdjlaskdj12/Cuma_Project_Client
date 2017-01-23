@@ -1,5 +1,7 @@
 language: cpp
-script: cmake .
+script: 
+ - brew install jsoncpp
+ - cmake .
 compiler:
  - clang++
 os:
