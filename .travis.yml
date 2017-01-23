@@ -1,7 +1,7 @@
 language: cpp
 
 before_script:
-  - wget https://github.com/open-source-parsers/jsoncpp -O /tmp
+  - wget https://github.com/open-source-parsers/jsoncpp -O /tmp/
   - python amalgamate.py
   
 script: 
