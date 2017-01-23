@@ -28,16 +28,21 @@ Cluster unit memory architecture 의 약자인 Cuma는 다중 서버를 기반�
 Cluster unit memory architecture (A.K.A Cuma) is way to store file based on Multi Base Server. As File Send protocol, when file is requested send by Client, file splits amount of Selected Cuma_Server list count and send it direct to Server. Althought there is no contect any repeter server.
 
 ##Cuma_Client
+
 About this Source is Client prototype Source that include Basic Core functional.
 
 ##Install Guide
 
-1.download Jsoncpp package from "https://github.com/open-source-parsers/jsoncpp"
+
+1. download Jsoncpp package from "https://github.com/open-source-parsers/jsoncpp"
    ex) wget "https://github.com/open-source-parsers/jsoncpp"
+
 2. repackage the Jsoncpp for generate header and source file
     ex) python amalgamate.py
+    
 3. move the "Jsoncpp/dist" directory to "{Project_Loc}/"
     ex) mv {Jsoncpp_location}/dist {Project_location}
+    
 4. done
 
 
