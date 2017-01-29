@@ -15,11 +15,19 @@ Cluster unit memory architecture 의 약자인 Cuma는 다중 서버를 기반�
 ##설치 순서 
 1.  JsonCpp 패키지를 다운받습니다.
       ex) wget https://github.com/open-source-parsers/jsoncpp
+      
 2.    JsonCpp 패키지를 빌드하여 헤더파일와 소스파일을 생성합니다.
         ex) python amalgamate.py
+        
 3.    생성된 Jsoncpp/dist 디렉토리를 {Cuma_Client위치}/에 옮김니다.
         ex) mv {Jsoncpp_location}/dist {Project_location} 
-4.    끝 
+        
+4.    Cmake를 이용하여 소스코드를 빌드합니다. command: --build . [--config ] [--target ] [-- -i]   
+         ex) cmake --build . {Install_Dir}                ==================> 반드시 --build 에 점이 들어가 있을것
+        
+5.    (4)번에서 빌드된 디렉토리 에서 build 명령어로 실행파일을 생성합니다.   ex) build
+
+6.    끝 
 
 
 #Cuma Project
@@ -42,7 +50,14 @@ About this Source is Client prototype Source that include Basic Core functional.
 3. move the "Jsoncpp/dist" directory to "{Project_Loc}/"
     ex) mv {Jsoncpp_location}/dist {Project_location}
     
-4. done
+4. Build the Source Code Using Cmake. command: --build . [--config ] [--target ] [-- -i]   
+      ex) cmake --build . {Install_Dir}      ==================> must have dot ahead in "--build"
+        
+5.  Generate execute file using "build" command in after build in (8) directory.   
+      ex) build
+
+6.    done
+
 
 
 Copyright (c) 2016  laskdjlaskdj12 allright reserved.
